@@ -1,13 +1,27 @@
-import { __unstable__loadDesignSystem } from "tailwindcss";
 import Nav from "./Nav"
 import { useLocation, useNavigate } from "react-router-dom"
-
+import React from "react"
+import PurchasePopup from "./PurchasePopup"
 
 export default function Compra(){
-
     const location = useLocation()
     const state = location.state
     const navigate = useNavigate()
+
+    const [quantidade, setQuantidade] = React.useState(1)
+    const [isPopupOpen, setIsPopupOpen] = React.useState(false)
+
+    const valorTotal = state.cake.preco * quantidade
+
+    const handleQuantidadeChange = (quantidade) => {
+        setQuantidade(quantidade)
+    }
+
+    function handleComprar() {
+        // Abrir o popup em vez de usar window.confirm
+        console.log(`Comprando ${quantidade} unidades de ${state.cake.nome} por R$ ${valorTotal}`)
+        setIsPopupOpen(true)
+    }
 
     return(
         <>
@@ -24,17 +38,37 @@ export default function Compra(){
                     <h1 className="text-[40px] my-2 text-center">{state.cake.descricao}</h1>
                     <div className="justify-items-center">
                         <p className="bg-white font-raleway text-[10px] w-50 font-[400] text-[#FF748C] text-center mb-[-4px] translate-x-[-21px]">quantidade</p>
-                        <select name="quan" className="w-50 bg-white mt-0 text-center font-[400] outline-none shadow-xl">
+                        <select 
+                            name="quan" 
+                            className="w-50 bg-white mt-0 text-center font-[400] outline-none shadow-xl"
+                            value={quantidade}
+                            onChange={(e) => handleQuantidadeChange(Number(e.target.value))}
+                        >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                         </select>
-                        <button className="bg-[#FF748C] size-[30px] rounded-full text-white ml-3 shadow-xl hover:cursor-pointer hover:bg-[#f59ead] transition-colors duration-500" onClick={() => {navigate(-1)}}>+</button>
+                        <button 
+                            className="bg-[#FF748C] size-[30px] rounded-full text-white ml-3 shadow-xl hover:cursor-pointer hover:bg-[#f59ead] transition-colors duration-500" 
+                            onClick={handleComprar}
+                        >
+                            +
+                        </button>
                     </div>
-                    
-                    
+                    <div className="flex justify-center items-center mt-4">
+                        <h1 className="text-[30px] font-raleway font-[600] text-[#023047]">Valor total: R$ {valorTotal}</h1>
+                    </div>
                 </div>
             </div>
+            
+            {/* Popup de confirmação de compra */}
+            <PurchasePopup 
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+                cake={state.cake}
+                quantidade={quantidade}
+                valorTotal={valorTotal}
+            />
         </>
     )
 }

@@ -5,9 +5,9 @@ import Bottom from "./Bottom"
 export default function Loja(){
 
     const [bolos, setBolos] = React.useState([
-        {id: 1, nome: "Cupcake", preco: "15", descricao: "Gostoso"},
-        {id: 2, nome: "Cupcake", preco: "10", descricao: "Delicioso"},
-        {id: 3, nome: "Cupcake", preco: "12", descricao: "Obra de arte"},
+        {id: 1, nome: "Chocalate", preco: "15", descricao: "Gostoso"},
+        {id: 2, nome: "Morango", preco: "10", descricao: "Delicioso"},
+        {id: 3, nome: "Baunilha", preco: "12", descricao: "Obra de arte"},
     ]);
 
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function Loja(){
                     {bolos.map((bolo) => (
                             <div 
                                 key={bolo.id}
-                                className="bg-white m-4 p-4 rounded-md size-[200px] hover:cursor-pointer"
+                                className="bg-white m-4 p-4 rounded-md size-[200px] hover:cursor-pointer hover:bg-gray-300 transition-colors duration-300 shadow-xl flex flex-col items-center justify-center"
                                 onClick={() => navigate(`/compra/${bolo.id}`, {
                                             state: { cake: bolo}
                                         })}
